@@ -28,7 +28,7 @@ public class Informacoes {
         System.out.println("Menu de opções");
         System.out.println(" > [1].Inserir nome");
         if(player01.getNome()!=null){
-        System.out.println(" > ["+(i-1)+"].Inciar jogo");
+        System.out.println(" > ["+(i-1)+"].Iniciar jogo");
         i++;}
         System.out.println(" > ["+(i-1)+"].Como jogar");
         System.out.println(" > ["+(i)+"].Sair");
