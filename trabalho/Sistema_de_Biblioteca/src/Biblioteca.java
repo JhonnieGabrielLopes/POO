@@ -64,18 +64,23 @@ public class Biblioteca {
     public void buscaPorAutor(ArrayList<Livro> biblioteca, Scanner in, Iterator<Livro> iter){
         Livro temp;
         String temp2;
+        boolean control1=true;
         System.out.print("Digite o nome do autor para busca: ");
         temp2=in.nextLine();
         Limpar_terminal.limpar();
         iter=biblioteca.iterator();
         System.out.println("Resultados para: "+temp2);
-        System.out.println("-------------------------------------------");
+        System.out.println("--------------------------------------------------");
         while (iter.hasNext()) {
             temp=iter.next();
             if (temp.getAutor().equalsIgnoreCase(temp2)) {
+                control1=false;
                 System.out.println(temp.detalheLivro());
-                System.out.println("-------------------------------------------");
+                System.out.println("--------------------------------------------------");
             }
+        }
+        if (control1) {
+            System.out.println("Não há livros de "+temp2+" nesta biblioteca.");
         }
         System.out.print("\nENTER...");
         in.nextLine();
@@ -84,19 +89,24 @@ public class Biblioteca {
     public void buscaPorAno(ArrayList<Livro> biblioteca, Scanner in, Iterator<Livro> iter){
         Livro temp;
         int temp2;
+        boolean control1=true;
         System.out.print("Digite o ano de publicação para busca: ");
         temp2=in.nextInt();
         in.nextLine();
         Limpar_terminal.limpar();
         iter=biblioteca.iterator();
         System.out.println("Resultados para: "+temp2);
-        System.out.println("-------------------------------------------");
+        System.out.println("--------------------------------------------------");
         while (iter.hasNext()) {
             temp=iter.next();
             if (temp.getAnoPublicacao()==temp2) {
+                control1=false;
                 System.out.println(temp.detalheLivro());
-                System.out.println("-------------------------------------------");
+                System.out.println("--------------------------------------------------");
             }
+        }
+        if (control1) {
+            System.out.println("Não há livros publicados em "+temp2+" nesta biblioteca.");
         }
         System.out.print("\nENTER...");
         in.nextLine();
