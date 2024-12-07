@@ -76,6 +76,23 @@ public class Hotel {
         }
         reserva.add(new Reserva(tempQuarto, (new Hospede(tempCPF, tempEND, tempTEL)), diasReserva, dataReservain));
     }
+    public void cancelarReserva(ArrayList<Reserva> reservas, Iterator<Reserva> iter, Scanner in){
+        System.out.println(" >> Cancelar reserva - HOTEL JAVA  <<");
+        System.out.print("Número do quarto: ");
+        int numQuarto=in.nextInt();
+        in.nextLine();
+        System.out.print("Data da reserva: ");
+        String dataReservaCancelar=in.nextLine();
+        
+        iter=reservas.iterator();
+        while (iter.hasNext()) {
+            Reserva temp=iter.next();
+            if (temp.getQuarto().getNumeroQuarto()==numQuarto&&temp.getDataReserva().equals(dataReservaCancelar)) {
+                reservas.remove(temp);
+                break;
+            }
+        }
+    }
     public static void main(String[] args) throws Exception {
         Limpar_terminal.limpar();
         //Inicialização
@@ -118,6 +135,7 @@ public class Hotel {
                     break;
                 case 2:
                     Limpar_terminal.limpar();
+                    mtd.cancelarReserva(reserva, iter, in);
                     break;
                 case 3:
                     Limpar_terminal.limpar();
