@@ -6,34 +6,38 @@ import java.util.Scanner;
 
 public class Hotel {
     public void Opcoes(){
-        System.out.println(" >> Menu de Opções - HOTEL JAVA << ");
-        System.out.println(" > [1].Adicionar reserva");
-        System.out.println(" > [2].Cancelar reserva");
-        System.out.println(" > [3].Buscar reservas");
-        System.out.println(" > [4].Receita total do hotel");
-        System.out.println(" > [5].Reservas ativas");
-        System.out.println(" > [6].Sair");
+        System.out.println(" >> MENU DE OPÇÕES - HOTEL JAVA << ");
+        System.out.println("------------------------------------------");
+        System.out.println(" > [1].ADICIONAR RESERVA");
+        System.out.println(" > [2].CANCELAR RESERVA");
+        System.out.println(" > [3].BUSCAR RESERVA");
+        System.out.println(" > [4].RECEITA TOTAL DO HOTEL");
+        System.out.println(" > [5].RESERVAS ATIVAS");
+        System.out.println(" > [6].SAIR");
+        System.out.println("------------------------------------------");
     }
     public void fazerReserva(ArrayList<Reserva> reserva, ArrayList<Quarto> quartos, Iterator<Quarto> iterQuartos, Iterator<Reserva> iter, Scanner in){
         //Variáveis temporárias - tempCPF: para pegar cpf, tempEND: para endereço do usuário e tempTEL: para telefone
         //Variáveis temporárias - temp: para número do quarto, temp1: para puxar reserva, temp2: para a data da reserva e temp3: para o números de dias reservados
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         //
-        System.out.println(" >> Nova Reserva - HOTEL JAVA << ");
-        System.out.println("Vamos fazer a sua reserva. Preencha os campos abaixo:");
+        System.out.println(" >> REALIZAR RESERVA - HOTEL JAVA << ");
+        System.out.println("------------------------------------------------------");
+        System.out.println("VAMOS FAZER A SUA RESERVA. PREENCHA OS CAMPOS ABAIXO:");
         System.out.print("CPF: ");
         String tempCPF=in.nextLine();
         System.out.print("ENDEREÇO: ");
         String tempEND=in.nextLine();
         System.out.print("TELEFONE PARA CONTATO: ");
         String tempTEL=in.nextLine();
-        System.out.print(" > Data para reserva (dd/MM/aaaa): ");
+        System.out.print("DATA PARA RESERVA: (dd/MM/aaaa): ");
         String dataReservain=in.nextLine(); // data da reserva, esse valor que será adicionado no objeto reserva
         LocalDate verifDataReserva=LocalDate.parse(dataReservain, formatter); // data formatada, será usada para verificar disponibilidade de quartos.
-        System.out.print(" > Quantos dias de reserva: ");
+        System.out.print("QUANTOS DIAS DE RESERVA: ");
         int diasReserva=in.nextInt();
         LocalDate dataFimReserva=verifDataReserva.plusDays(diasReserva);
-        System.out.println("Escolha um quarto entre os disponíveis:");
+        System.out.println("------------------------------------------");
+        System.out.println("ESCOLHA UM QUARTO ENTRE OS DISPONÍVEIS:\n");
             Reserva temp1;
             Quarto temp;
             iterQuartos=quartos.iterator();
@@ -53,10 +57,12 @@ public class Hotel {
                     }
                 }
                 if (disponivel) {
-                    System.out.println("["+(temp.getNumeroQuarto())+"] Diária: R$"+temp.getValorDiaria()+"\n");
+                    System.out.println("    ["+(temp.getNumeroQuarto())+"] VALOR DIÁRIO: R$"+temp.getValorDiaria()+"0\n");
                 }
             }
+        System.out.print("    > ");
         int tempQuartoIN=in.nextInt();
+        in.nextLine();
         Quarto tempQuarto = new Quarto(0, 0);
         switch (tempQuartoIN) {
             case 101:
@@ -75,23 +81,93 @@ public class Hotel {
                 break;
         }
         reserva.add(new Reserva(tempQuarto, (new Hospede(tempCPF, tempEND, tempTEL)), diasReserva, dataReservain));
+        System.out.println("\n------------------------------------------");
+        System.out.println(" >> RESERVA CADASTRADA COM SUCESSO <<");
+        System.out.println("------------------------------------------");
+        System.out.print("ENTER...");
+        in.nextLine();
+        Limpar_terminal.limpar();
     }
-    public void cancelarReserva(ArrayList<Reserva> reservas, Iterator<Reserva> iter, Scanner in){
-        System.out.println(" >> Cancelar reserva - HOTEL JAVA  <<");
-        System.out.print("Número do quarto: ");
+    public void cancelarReserva(ArrayList<Reserva> reserva, Iterator<Reserva> iter, Scanner in){
+        boolean teste=true;
+        System.out.println(" >> CANCELAR RESERVA - HOTEL JAVA  <<");
+        System.out.println("------------------------------------------");
+        System.out.print("NÚMERO DO QUARTO: ");
         int numQuarto=in.nextInt();
         in.nextLine();
-        System.out.print("Data da reserva: ");
+        System.out.print("DATA DA RESERVA: ");
         String dataReservaCancelar=in.nextLine();
         
-        iter=reservas.iterator();
+        iter=reserva.iterator();
         while (iter.hasNext()) {
             Reserva temp=iter.next();
             if (temp.getQuarto().getNumeroQuarto()==numQuarto&&temp.getDataReserva().equals(dataReservaCancelar)) {
-                reservas.remove(temp);
+                reserva.remove(temp);
+                System.out.println("\n------------------------------------------");
+                System.out.println(" >> RESERVA REMOVIDA COM SUCESSO <<");
+                teste=false;
                 break;
             }
         }
+        if (teste) {
+            System.out.println("NÃO HÁ RESERVAS PARA ESTE QUARTO NA DATA FORNECIDA");
+        }
+        System.out.println("------------------------------------------");
+        System.out.print("ENTER...");
+        in.nextLine();
+        Limpar_terminal.limpar();
+    }
+    public void consultarReserva(ArrayList<Reserva> reserva, Iterator<Reserva> iter, Scanner in){
+        boolean teste=true;
+        System.out.println(" >> CONSULTAR RESERVA - HOTEL JAVA <<");
+        System.out.println("------------------------------------------");
+        System.out.print("DIGITE O CPF: ");
+        String tempCPF=in.nextLine();
+        iter=reserva.iterator();
+        while (iter.hasNext()) {
+            Reserva temp=iter.next();
+            if (tempCPF.equals(temp.getHospede().getCpf())) {
+                System.out.println("\n------------------------------------------");
+                System.out.println("INFORMAÇÕES DA RESERVA");
+                System.out.println("------------------------------------------");
+                System.out.println("QUARTO: "+temp.getQuarto().getNumeroQuarto());
+                System.out.println("VALOR DIÁRIO: R$"+temp.getQuarto().getValorDiaria());
+                System.out.println("RESERVADA ATIVA A PARTIR DE: "+temp.getDataReserva()+" POR "+temp.getNumeroDias()+" DIAS");
+                System.out.println("------------------------------------------");
+                System.out.println("INFORMAÇÕES ADICIONAIS");
+                System.out.println("------------------------------------------");
+                System.out.println("CPF: "+temp.getHospede().getCpf());
+                System.out.println("ENDEREÇO: "+temp.getHospede().getEndereco());
+                System.out.println("TELEFONE DE CONTATO: "+temp.getHospede().getTelefone());
+                teste=false;
+            }
+        }
+        if (teste) {
+            System.out.println("NÃO HÁ RESERVAS ATIVAS PARA "+tempCPF);
+        }
+        System.out.println("------------------------------------------");
+        System.out.print("ENTER...");
+        in.nextLine();
+        Limpar_terminal.limpar();
+    }
+    public void receitaTotal(ArrayList<Reserva> reserva, Iterator<Reserva> iter, Scanner in){
+        iter=reserva.iterator();
+        
+    }
+    public void verificarTodasReservas(ArrayList<Reserva> reserva, Iterator<Reserva> iter, Scanner in){
+        System.out.println("------------------------------------------------");
+        System.out.println(" >> RESERVAS ATIVAS - HOTEL JAVA <<");
+        iter=reserva.iterator();
+        while (iter.hasNext()) {
+            Reserva temp=iter.next();
+            System.out.println("-----------------------------------------------");
+            System.out.println("QUARTO: "+temp.getQuarto().getNumeroQuarto());
+            System.out.println("RESERVADA ATIVA A PARTIR DE: "+temp.getDataReserva()+" POR "+temp.getNumeroDias()+" DIAS");
+        }
+        System.out.println("------------------------------------------------");
+        System.out.print("ENTER...");
+        in.nextLine();
+        Limpar_terminal.limpar();
     }
     public static void main(String[] args) throws Exception {
         Limpar_terminal.limpar();
@@ -134,17 +210,47 @@ public class Hotel {
                     mtd.fazerReserva(reserva, quartos, iterQuartos, iter, in);
                     break;
                 case 2:
-                    Limpar_terminal.limpar();
-                    mtd.cancelarReserva(reserva, iter, in);
+                    if (!reserva.isEmpty()) {
+                        Limpar_terminal.limpar();
+                        mtd.cancelarReserva(reserva, iter, in);
+                    }else{
+                        System.out.println("\n >> NENHUMA RESERVA ATIVA\n");
+                        System.out.print("ENTER...");
+                        in.nextLine();
+                        Limpar_terminal.limpar();
+                    }
                     break;
                 case 3:
-                    Limpar_terminal.limpar();
+                    if (!reserva.isEmpty()) {
+                        Limpar_terminal.limpar();
+                        mtd.consultarReserva(reserva, iter, in);
+                    }else{
+                        System.out.println("\n >> NENHUMA RESERVA ATIVA\n");
+                        System.out.print("ENTER...");
+                        in.nextLine();
+                        Limpar_terminal.limpar();
+                    }
                     break;
                 case 4:
-                    Limpar_terminal.limpar();
+                    if (!reserva.isEmpty()) {
+                        Limpar_terminal.limpar();
+                    }else{
+                        System.out.println("\n >> NENHUMA RESERVA ATIVA\n");
+                        System.out.print("ENTER...");
+                        in.nextLine();
+                        Limpar_terminal.limpar();
+                    }
                     break;
                 case 5:
-                    Limpar_terminal.limpar();
+                    if (!reserva.isEmpty()) {
+                        Limpar_terminal.limpar();
+                        mtd.verificarTodasReservas(reserva, iter, in);                    
+                    }else{
+                        System.out.println("\nNENHUMA RESERVA ATIVA\n");
+                        System.out.print("ENTER...");
+                        in.nextLine();
+                        Limpar_terminal.limpar();
+                    }
                     break;
                 case 6:
                     break;
@@ -157,6 +263,7 @@ public class Hotel {
                     break;
             }
         } while (opc!=6);
+        in.close();
     }
 }
 /*Desenvolva um programa para gerenciar reservas de um hotel. Implemente
