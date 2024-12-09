@@ -19,18 +19,20 @@ public class Hotel {
     public void fazerReserva(ArrayList<Reserva> reserva, ArrayList<Quarto> quartos, Iterator<Quarto> iterQuartos, Iterator<Reserva> iter, Scanner in){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         boolean control=true;
-        System.out.println(" >> REALIZAR RESERVA - HOTEL JAVA << ");
-        System.out.println("------------------------------------------------------");
-        System.out.println("VAMOS FAZER A SUA RESERVA. PREENCHA OS CAMPOS ABAIXO:");
-
         String tempCPF;
         do{
+            System.out.println(" >> REALIZAR RESERVA - HOTEL JAVA << ");
+            System.out.println("------------------------------------------------------");
+            System.out.println("VAMOS FAZER A SUA RESERVA. PREENCHA OS CAMPOS ABAIXO:");
             System.out.print("CPF: ");
             tempCPF=in.nextLine();
-            control=true;
-            if (tempCPF.length()<11||tempCPF.length()>14) {
-                System.out.println("CPF DIGITADO ERRADO OU INVÁLIDO! INSIRA NOVAMENTE.");
-                control=false;
+            control=false;
+            if (!(tempCPF.length()==11||tempCPF.length()==14)) {
+                System.out.println("\nCPF DIGITADO ERRADO OU INVÁLIDO! INSIRA NOVAMENTE.");
+                control=true;
+                System.out.print("\nENTER...");
+                in.nextLine();
+                Limpar_terminal.limpar();
             }
         }while(control);
         
@@ -38,22 +40,32 @@ public class Hotel {
         String tempEND=in.nextLine();
         System.out.print("TELEFONE PARA CONTATO: ");
         String tempTEL=in.nextLine();
-        System.out.print("DATA PARA RESERVA: (dd/MM/aaaa): ");
-        String dataReservain=in.nextLine(); // data da reserva, esse valor que será adicionado no objeto reserva
-        
-        LocalDate verifDataReserva=LocalDate.parse(dataReservain, formatter); // data formatada, será usada para verificar disponibilidade de quartos.
+        LocalDate verifDataReserva=null;
+        String dataReservain=null;
+        do{
+            try {
+                System.out.print("DATA PARA RESERVA: (dd/MM/aaaa): ");
+                dataReservain=in.nextLine(); // data da reserva, esse valor que será adicionado no objeto reserva
+                verifDataReserva=LocalDate.parse(dataReservain, formatter); // data formatada, será usada para verificar disponibilidade de quartos.
+                control=false;
+            } catch (Exception e) {
+                System.out.println("\nENTRADA OU DATA INVÁLIDA, TENTE NOVAMENTE.\n");
+                control=true;
+            }
+        }while(control);
         int diasReserva=0;
         do{
             System.out.print("QUANTOS DIAS DE RESERVA: ");
             try {
                 diasReserva=in.nextInt();
                 in.nextLine();
-                control=true;
+                control=false;
             } catch (Exception e) {
+                in.nextLine();
                 System.out.println("ENTRADA INVÁLIDA, DEVE SER UM NÚMERO INTEIRO.");
                 System.out.print("ENTER...");
                 in.nextLine();
-                control=false;
+                control=true;
                 Limpar_terminal.limpar();
             }
         }while(control);
@@ -86,8 +98,8 @@ public class Hotel {
             }
         }
         int tempQuartoIN=0;
-        boolean control2=true;
         Quarto tempQuarto = new Quarto(0, 0);
+        boolean control2;
         do{
             do{
                 System.out.print("QUANTOS DIAS DE RESERVA: ");
@@ -95,15 +107,16 @@ public class Hotel {
                     System.out.print("    > ");
                     tempQuartoIN=in.nextInt();
                     in.nextLine();
-                    control=true;
+                    control=false;
                 } catch (Exception e) {
                     System.out.println("ENTRADA INVÁLIDA, DEVE SER UM NÚMERO INTEIRO.");
                     System.out.print("ENTER...");
                     in.nextLine();
-                    control=false;
+                    control=true;
                     Limpar_terminal.limpar();
                 }
             }while(control);
+            control2=true;
             switch (tempQuartoIN) {
                 case 101:
                     tempQuarto=quartos.get(0);
@@ -126,7 +139,7 @@ public class Hotel {
                     Limpar_terminal.limpar();
                     break;
             }
-        }while(control2);
+        }while(!control2);
         reserva.add(new Reserva(tempQuarto, (new Hospede(tempCPF, tempEND, tempTEL)), diasReserva, dataReservain));
         System.out.println("\n------------------------------------------");
         System.out.println(" >> RESERVA CADASTRADA COM SUCESSO <<");
@@ -145,12 +158,12 @@ public class Hotel {
             try {
                 numQuarto=in.nextInt();
                 in.nextLine();
-                control=true;
+                control=false;
             } catch (Exception e) {
                 System.out.println("ENTRADA INVÁLIDA, DEVE SER UM NÚMERO INTEIRO.");
                 System.out.print("ENTER...");
                 in.nextLine();
-                control=false;
+                control=true;
                 Limpar_terminal.limpar();
             }
         }while(control);
@@ -185,10 +198,10 @@ public class Hotel {
         do{
             System.out.print("DIGITE O CPF: ");
             tempCPF=in.nextLine();
-            control=true;
-            if (tempCPF.length()<11||tempCPF.length()>14) {
+            control=false;
+            if (!(tempCPF.length()==11||tempCPF.length()==14)) {
                 System.out.println("CPF DIGITADO ERRADO OU INVÁLIDO! INSIRA NOVAMENTE.");
-                control=false;
+                control=true;
             }
         }while(control);
 
@@ -197,17 +210,12 @@ public class Hotel {
             Reserva temp=iter.next();
             if (tempCPF.equals(temp.getHospede().getCpf())) {
                 System.out.println("\n------------------------------------------");
-                System.out.println("INFORMAÇÕES DA RESERVA");
+                System.out.println("RESERVA");
                 System.out.println("------------------------------------------");
                 System.out.println("QUARTO: "+temp.getQuarto().getNumeroQuarto());
                 System.out.println("VALOR DIÁRIO: R$"+temp.getQuarto().getValorDiaria());
                 System.out.println("RESERVADA ATIVA A PARTIR DE: "+temp.getDataReserva()+" POR "+temp.getNumeroDias()+" DIAS");
                 System.out.println("------------------------------------------");
-                System.out.println("INFORMAÇÕES ADICIONAIS");
-                System.out.println("------------------------------------------");
-                System.out.println("CPF: "+temp.getHospede().getCpf());
-                System.out.println("ENDEREÇO: "+temp.getHospede().getEndereco());
-                System.out.println("TELEFONE DE CONTATO: "+temp.getHospede().getTelefone());
                 teste=false;
             }
         }
