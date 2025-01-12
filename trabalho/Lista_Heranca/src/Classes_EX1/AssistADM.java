@@ -8,7 +8,7 @@ public class AssistADM extends Assistente {
         super(nome, salario, matricula);
         this.turno=turno;
         this.addNoturno=addNoturno;
-    }
+    } 
 
     public String getTurno() {
         return turno;

@@ -6,7 +6,7 @@ public class Assistente extends Funcionario{
     public Assistente(String nome, double salario, String matricula){
         super(nome, salario);
         this.matricula=matricula;
-    }
+    } 
 
     public String getMatricula(){
         return matricula;

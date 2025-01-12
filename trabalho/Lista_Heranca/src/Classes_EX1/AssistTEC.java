@@ -6,7 +6,7 @@ public class AssistTEC extends Assistente{
     public AssistTEC(String nome, double salario, String matricula, double bonus){
         super(nome, salario, matricula);
         this.bonus=bonus;
-    }
+    } 
 
     public double getBonus() {
         return bonus;

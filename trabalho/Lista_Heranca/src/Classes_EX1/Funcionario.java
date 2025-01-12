@@ -29,10 +29,12 @@ public class Funcionario {
         //entendendo que seja apenas um aumento no salário do funcionário
         salario=salario+valor;
     }
+
     public String ganhoAnual(){
         String ganho="Funcionário: "+nome+"\nGanho anual: R$"+(salario*12);
         return ganho;
     }
+    
     public void exibeDados(){
         System.out.println("Funcionário: "+nome+"\nSalário: R$"+salario);        
     }
